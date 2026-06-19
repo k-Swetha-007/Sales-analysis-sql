@@ -1,0 +1,94 @@
+CREATE TABLE sales (
+    order_id INT PRIMARY KEY,
+    customer_name VARCHAR(50),
+    product_name VARCHAR(50),
+    category VARCHAR(30),
+    quantity INT,
+    price DECIMAL(10,2),
+    sales_amount DECIMAL(10,2),
+    region VARCHAR(30),
+    order_date DATE
+);
+
+INSERT INTO sales VALUES
+(101,'Rahul','Laptop','Electronics',1,50000,50000,'South','2025-01-10'),
+(102,'Priya','Mobile','Electronics',2,20000,40000,'North','2025-01-15'),
+(103,'Arjun','Chair','Furniture',3,3000,9000,'East','2025-02-05'),
+(104,'Sneha','Table','Furniture',1,7000,7000,'West','2025-02-10'),
+(105,'Kiran','Headphones','Electronics',4,2000,8000,'South','2025-03-01'),
+(106,'Divya','Notebook','Stationery',10,100,1000,'North','2025-03-05'),
+(107,'Ravi','Printer','Electronics',1,15000,15000,'East','2025-03-12'),
+(108,'Anjali','Desk','Furniture',2,8000,16000,'West','2025-04-01'),
+(109,'Vikram','Pen','Stationery',20,20,400,'South','2025-04-10'),
+(110,'Meera','Monitor','Electronics',2,12000,24000,'North','2025-04-20');
+
+SELECT * FROM sales;
+
+SELECT SUM(sales_amount) AS total_revenue
+FROM sales;
+SELECT product_name, SUM(sales_amount) AS revenue
+FROM sales
+GROUP BY product_name
+ORDER BY revenue DESC;
+SELECT category, SUM(sales_amount) AS total_sales
+FROM sales
+GROUP BY category;
+SELECT region, SUM(sales_amount) AS total_sales
+FROM sales
+GROUP BY region;
+SELECT region,
+       SUM(sales_amount) AS total_sales
+FROM sales
+GROUP BY region
+ORDER BY total_sales DESC;
+SELECT customer_name,
+       SUM(sales_amount) AS total_purchase
+FROM sales
+GROUP BY customer_name
+ORDER BY total_purchase DESC
+LIMIT 5;
+SELECT category,
+       SUM(sales_amount) AS total_sales
+FROM sales
+GROUP BY category
+HAVING SUM(sales_amount) > 20000;
+SELECT category,
+       AVG(sales_amount) AS avg_sales
+FROM sales
+GROUP BY category;
+SELECT customer_name,
+       SUM(sales_amount) AS total_spent
+FROM sales
+GROUP BY customer_name
+ORDER BY total_spent DESC
+LIMIT 1;
+SELECT product_name,
+       SUM(quantity) AS total_quantity
+FROM sales
+GROUP BY product_name
+HAVING SUM(quantity) > 1;
+SELECT *
+FROM sales
+WHERE category = 'Electronics';
+SELECT *
+FROM sales
+ORDER BY sales_amount DESC
+LIMIT 3;
+SELECT *
+FROM sales
+WHERE sales_amount >
+(
+    SELECT AVG(sales_amount)
+    FROM sales
+);
+SELECT customer_name,
+       SUM(sales_amount) AS total_sales,
+       RANK() OVER (ORDER BY SUM(sales_amount) DESC) AS rank_no
+FROM sales
+GROUP BY customer_name;
+SELECT order_date,
+       sales_amount,
+       SUM(sales_amount) OVER (ORDER BY order_date) AS running_total
+FROM sales;
+
+
